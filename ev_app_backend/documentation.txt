@@ -1,0 +1,79 @@
+class StationService:
+    def get_nearby_stations(
+        db: Session,
+        lat: float,
+        lng: float,
+        radius: float = 10.0,
+        min_power: Optional[float] = None,
+        connector_type: Optional[str] = None
+    ) -> List[Station]
+    
+    def create_station(db: Session, station_data: StationCreate) -> Station
+    def bulk_create_stations(db: Session, stations_data: List[StationCreate]) -> List[Station]
+    def get_station_stats(db: Session) -> Dict
+    def _calculate_distance(lat1: float, lon1: float, lat2: float, lon2: float) -> float
+
+    HTTP Request → FastAPI Router → Endpoint Function → 
+Service Layer → Database Model → PostgreSQL → 
+Return Response → Client
+
+
+PostgreSQL EV-APP Backend - File Functions
+ Core Configuration
+app/main.py - FastAPI application entry point, CORS setup, router registration
+
+app/core/config.py - Environment variables, application settings, configuration management
+
+app/core/database.py - PostgreSQL connection, SQLAlchemy engine, session management
+
+app/core/security.py - Password hashing, JWT token creation/validation
+
+ Data Models (SQLAlchemy)
+app/models/user.py - Users table schema (authentication)
+
+app/models/station.py - Charging stations table schema
+
+app/models/vehicle.py - EV specifications table schema
+
+ API Schemas (Pydantic)
+app/schemas/user.py - User request/response validation (registration, login)
+
+app/schemas/station.py - Station data validation and serialization
+
+ Business Logic Services
+app/services/auth_service.py - User authentication, registration, password management
+
+app/services/station_service.py - Station operations, nearby search, distance calculations
+
+ API Endpoints (FastAPI Routes)
+app/api/endpoints/auth.py - /api/auth/register, /api/auth/login endpoints
+
+app/api/endpoints/stations.py - /api/stations/, /api/stations/nearby, /api/stations/stats endpoints
+
+ Management Scripts
+scripts/setup_database.py - Database table creation and initialization
+
+scripts/test_connection.py - PostgreSQL connection testing
+
+scripts/dynamic_append.py - Data management and synchronization
+
+ Configuration Files
+requirements.txt - Python dependencies (FastAPI, SQLAlchemy, psycopg2, etc.)
+
+.env - Environment variables (database URLs, secrets, API keys)
+
+docker-compose.yml - Container orchestration (PostgreSQL, FastAPI, Nginx)
+
+ Your Existing Data Tables
+charging_stations - Main data source (242,417 rows)
+
+stations - Processed station data (48,000 rows)
+
+ev_models - Electric vehicle specifications (63 rows)
+
+users - User accounts (1 row)
+
+country_summary - Aggregated country statistics (122 rows)
+
+world_summary - Global statistics (122 rows)
+
